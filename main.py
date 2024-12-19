@@ -1,6 +1,7 @@
 import streamlit as st
 import joblib
 from transformers import T5Tokenizer, T5ForConditionalGeneration
+import torch
 
 # Function to load the model and tokenizer
 @st.cache_resource
