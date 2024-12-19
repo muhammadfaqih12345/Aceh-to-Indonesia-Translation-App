@@ -1,4 +1,5 @@
-google-trans-new
+joblib
 streamlit
 gtts
+transformers
 
