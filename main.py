@@ -5,15 +5,17 @@ import torch
 
 # Function to load the model and tokenizer
 @st.cache_resource
-def load_model():
-    try:
-        # Load the model and tokenizer
-        model = joblib.load("model_T5.pkl", map_location=torch.device('cpu'))
-        tokenizer = T5Tokenizer.from_pretrained("t5-base")
-        return model, tokenizer
-    except Exception as e:
-        st.error(f"Error loading model or tokenizer: {e}")
-        return None, None
+import gdown
+
+# URL file Google Drive (dapatkan ID file dari tautan berbagi)
+url = "https://drive.google.com/uc?id=1_UUnmHqfI3tEAAJfjWGraAAXdORFgr0C"
+output = "model.pkl"
+gdown.download(url, output, quiet=False)
+
+# Muat model
+import pickle
+with open(output, "rb") as file:
+    model = pickle.load(file)
 
 # Load the model and tokenizer
 #model, tokenizer = load_model()
