@@ -1,42 +1,58 @@
 import streamlit as st
 import joblib
 from transformers import T5Tokenizer, T5ForConditionalGeneration
-import gtts # pip install gtts
+from gdown import download
 
+url = "https://drive.google.com/uc?id=YOUR_FILE_ID"
+output = "model_T5.pkl"
+
+# Download the model
+download(url, output, quiet=False)
+
+# Function to load the model and tokenizer
 @st.cache_resource
 def load_model():
-    model = joblib.load("model_T5.pkl")
-    tokenizer = T5Tokenizer.from_pretrained("t5-base")
-    return model, tokenizer
+    try:
+        model = joblib.load("model_T5.pkl")
+        tokenizer = T5Tokenizer.from_pretrained("t5-base")
+        return model, tokenizer
+    except Exception as e:
+        st.error(f"Error loading model or tokenizer: {e}")
+        return None, None
 
+# Load the model and tokenizer
 model, tokenizer = load_model()
 
-st.set_page_config(page_title='Translate Aceh to Indonesia', page_icon='translator-icon.png', layout='wide', initial_sidebar_state='expanded')
+# Configure Streamlit page
+st.set_page_config(
+    page_title="Translate Aceh to Indonesia",
+    page_icon="translator-icon.png",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
 
+# Supported languages
+Languages = {"aceh": "ace", "indonesia": "ind"}
 
-Languages = {'aceh':'ace','indonesia':'ind'}
+# Translator app
+st.title("Language Translator :balloon:")
 
+# User input for text
+aceh_text = st.text_area("Enter text:", height=None, max_chars=None, key=None, help="Enter your text here")
 
-translator = model
-st.title("Language Translator:balloon:")
+# Language selection
+option1 = st.selectbox("Input language", ("aceh",))
+option2 = st.selectbox("Output language", ("indonesia",))
 
-aceh_text = st.text_area("Enter text:",height=None,max_chars=None,key=None,help="Enter your text here")
-
-option1 = st.selectbox('Input language',
-                      ('aceh'))
-
-option2 = st.selectbox('Output language',
-                       ('indonesia'))
-
+# Fetch language codes
 value1 = Languages[option1]
 value2 = Languages[option2]
 
-if st.button('Translate Sentence'):
-    if aceh_text == "":
-        st.warning('Please **enter text** for translation')
-
-    else aceh_text.strip():
-        # Prepare input
+if st.button("Translate Sentence"):
+    if aceh_text.strip() == "":
+        st.warning("Please **enter text** for translation.")
+    else:
+        # Prepare input for translation
         input_text = f"translate Aceh to Indonesian: {aceh_text}"
         input_ids = tokenizer.encode(input_text, return_tensors="pt")
         
@@ -46,16 +62,9 @@ if st.button('Translate Sentence'):
         
         # Display result
         st.write("### Translation:")
-        st.info(str(translated_text))
+        st.info(translated_text)
         st.success("Translation is **successfully** completed!")
         st.balloons()
+        
 else:
-    pass
-
- 
- 
-
-
-
-
-
+    st.info("Click the **Translate Sentence** button to get the translation.")
