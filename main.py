@@ -16,7 +16,7 @@ def load_model():
         return None, None
 
 # Load the model and tokenizer
-model, tokenizer = load_model()
+#model, tokenizer = load_model()
 
 # Configure Streamlit page
 st.set_page_config(
