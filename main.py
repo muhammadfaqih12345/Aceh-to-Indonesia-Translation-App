@@ -7,7 +7,8 @@ import torch
 @st.cache_resource
 def load_model():
     try:
-        model = joblib.load("model_T5.pkl")
+        # Load the model and tokenizer
+        model = joblib.load("model_T5.pkl", map_location=torch.device('cpu'))
         tokenizer = T5Tokenizer.from_pretrained("t5-base")
         return model, tokenizer
     except Exception as e:
