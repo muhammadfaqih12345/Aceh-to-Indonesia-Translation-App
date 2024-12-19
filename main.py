@@ -1,13 +1,6 @@
 import streamlit as st
 import joblib
 from transformers import T5Tokenizer, T5ForConditionalGeneration
-from gdown import download
-
-url = "https://drive.google.com/uc?id=YOUR_FILE_ID"
-output = "model_T5.pkl"
-
-# Download the model
-download(url, output, quiet=False)
 
 # Function to load the model and tokenizer
 @st.cache_resource
@@ -65,6 +58,6 @@ if st.button("Translate Sentence"):
         st.info(translated_text)
         st.success("Translation is **successfully** completed!")
         st.balloons()
-        
+
 else:
     st.info("Click the **Translate Sentence** button to get the translation.")
